@@ -28,26 +28,31 @@ namespace IdentityUdemyCourse
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Context>(option=> {
+            services.AddDbContext<Context>(option =>
+            {
                 option.UseSqlServer(Configuration["ConnectionStrings:DefaultConnectionString"]);
             });
 
-            CookieBuilder cookieBuilder = new CookieBuilder();
-            cookieBuilder.Name = "MyBlog";
-            cookieBuilder.HttpOnly = false;
-            cookieBuilder.Expiration = System.TimeSpan.FromDays(60);
-            cookieBuilder.SameSite = SameSiteMode.Lax;
-            cookieBuilder.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            
+            
 
             services.ConfigureApplicationCookie(opts =>
             {
                 opts.LoginPath = new PathString("/Home/Login");
-                opts.Cookie = cookieBuilder;
+                opts.Cookie = new CookieBuilder
+                {
+                    Name = "MyBlog",
+                    HttpOnly = false,
+                    SameSite = SameSiteMode.Lax,
+                    SecurePolicy = CookieSecurePolicy.SameAsRequest
+                };
+                opts.ExpireTimeSpan = System.TimeSpan.FromDays(7);
                 opts.SlidingExpiration = true;
             });
 
 
-            services.AddIdentity<AppUser, AppRole>(opts=> {
+            services.AddIdentity<AppUser, AppRole>(opts =>
+            {
                 opts.User.RequireUniqueEmail = true;
                 opts.User.AllowedUserNameCharacters = "abcçdefgðhýijklmnoöpqrsþtuvwxyzABCÇDEFGÐHIÝJKLMNOÖPQRSÞTUVWXYZ0123456789-._";
                 opts.Password.RequiredLength = 6;
@@ -78,7 +83,7 @@ namespace IdentityUdemyCourse
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();

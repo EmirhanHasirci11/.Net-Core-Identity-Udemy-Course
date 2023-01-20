@@ -12,19 +12,45 @@ namespace IdentityUdemyCourse.Controllers
     public class HomeController : Controller
     {
         private readonly UserManager<AppUser> userManager;
+        private readonly SignInManager<AppUser> signInManager;
 
-        public HomeController(UserManager<AppUser> userManager)
+        public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         public IActionResult Index()
         {
             return View();
         }
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel p)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = await userManager.FindByEmailAsync(p.Email);
+                if (user != null)
+                {
+                    await signInManager.SignOutAsync();
+                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(user, p.Password, false, false);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Member");
+                    }
+
+                }
+                else
+                {
+                    ModelState.AddModelError("","Geçersiz email adresi veya şifresi");
+                }
+            }
+            return View(p);
         }
         [HttpGet]
         public IActionResult SignUp()
