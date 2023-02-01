@@ -1,5 +1,7 @@
 using IdentityUdemyCourse.CustomValidation;
 using IdentityUdemyCourse.Models;
+using IdentityUdemyCourse.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,23 +34,12 @@ namespace IdentityUdemyCourse
             {
                 option.UseSqlServer(Configuration["ConnectionStrings:DefaultConnectionString"]);
             });
+            services.AddScoped<TwoFactorService>();
+            services.AddScoped<EmailSender>();
+            services.Configure<TwoFactorOptions>(Configuration.GetSection("TwoFactorOptions"));
 
-            
-            
 
-            services.ConfigureApplicationCookie(opts =>
-            {
-                opts.LoginPath = new PathString("/Home/Login");
-                opts.Cookie = new CookieBuilder
-                {
-                    Name = "MyBlog",
-                    HttpOnly = false,
-                    SameSite = SameSiteMode.Lax,
-                    SecurePolicy = CookieSecurePolicy.SameAsRequest
-                };
-                opts.ExpireTimeSpan = System.TimeSpan.FromDays(7);
-                opts.SlidingExpiration = true;
-            });
+
 
 
             services.AddIdentity<AppUser, AppRole>(opts =>
@@ -63,10 +54,40 @@ namespace IdentityUdemyCourse
             .AddEntityFrameworkStores<Context>()
             .AddPasswordValidator<CustomPasswrodValidator>()
             .AddErrorDescriber<CustomIdentityErrorDescriber>()
-            .AddUserValidator<CustomUserValidator>();
+            .AddUserValidator<CustomUserValidator>()
+            .AddDefaultTokenProviders();
 
+            services.ConfigureApplicationCookie(opts =>
+            {
+                opts.LoginPath = new PathString("/Home/Login");
+                opts.Cookie = new CookieBuilder
+                {
+                    Name = "MyBlog",
+                    HttpOnly = false,
+                    SameSite = SameSiteMode.Lax,
+                    SecurePolicy = CookieSecurePolicy.SameAsRequest
+                };
+                opts.SlidingExpiration = true;
+                opts.ExpireTimeSpan =TimeSpan.FromDays(7);
+                opts.LogoutPath=new PathString("/Member/Logout");
+                opts.AccessDeniedPath = new PathString("/Member/AccessDenied");
+            });
+
+            services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy("BilecikPolicy", policy =>
+                 {
+                     policy.RequireClaim("city", "Bilecik");
+                 });
+            });
             services.AddControllersWithViews();
+            services.AddScoped<IClaimsTransformation, ClaimProvider.ClaimProvider>();
             services.AddMvc();
+            services.AddSession(opts =>
+            {
+                opts.IdleTimeout = TimeSpan.FromMinutes(30);
+                opts.Cookie.Name = "MainSession";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,8 +109,8 @@ namespace IdentityUdemyCourse
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseRouting();
-
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

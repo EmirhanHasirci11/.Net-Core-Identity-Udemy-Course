@@ -15,13 +15,17 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input value="emir_han886@outlook.com" asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="RememberMe" type="checkbox" class="form-check-inline"/>Beni Hatırla
+                <span asp-validation-for="RememberMe" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Giriş Yap" class="btn btn-primary" />

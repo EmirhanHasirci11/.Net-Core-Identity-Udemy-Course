@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - IdentityUdemyCourse</title>
+    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        .navbar a {
+            color: white;
+        }
+
+            .navbar a:hover {
+                color: yellow;
+            }
+    </style>
+    <script src="~/lib/jquery/jquery.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+            <a style="margin-left:200px" class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-action="Index" asp-controller="Member">Ana Sayfa</a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-8">
+                @RenderBody()
+
+            </div>
+            <div class="col-md-4">
+                <h3>Menü</h3>
+
+                <a class="btn btn-info btn-block col-12 text-white " style="margin:10px" asp-action="PasswordChange" asp-controller="Member">Şifre değiştirme</a>
+
+
+                <a class="btn btn-info btn-block col-12 text-white" style="margin:10px" asp-action="UserEdit" asp-controller="Member">Bilgi güncelleme</a><br />
+                <a class="btn btn-info btn-block col-12 text-white" style="margin:10px" href="/Admin/Index">Admin Paneli</a><br />
+                <a class="btn btn-danger btn-block col-12 text-white" style="margin:10px" href="/Member/TwoFactorAuth">Two Factor Authentication</a><br />
+
+                <a class="btn btn-info btn-block col-12 text-white" style="margin:10px" asp-action="Logout" asp-controller="Member" asp-route-returnUrl="/Home/Login">Çıkış yap</a><br />
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - IdentityUdemyCourse - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/davidshimjs-qrcodejs-04f46c6/qrcode.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

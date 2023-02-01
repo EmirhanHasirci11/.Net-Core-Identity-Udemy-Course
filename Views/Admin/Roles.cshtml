@@ -1,0 +1,33 @@
+﻿@model IEnumerable<AppRole>
+@{
+    ViewData["Title"] = "Roles";
+    Layout = "~/Views/Shared/_Admin_Layout_.cshtml";
+}
+
+<h2>Roller</h2>
+<div class="row">
+<div class="col-12">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th colspan="2">Tools</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td><a onclick="return confirm('Bu rolü silmek istediğinize emin misiniz?');" href="/Admin/DeleteRole/@item.Id">Sil</a></td>
+                <td><a class="btn btn-info" asp-action="UpdateRole" asp-controller="Admin" asp-route-id="@item.Id">Güncelle</a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</div>
+<a class="btn btn-info" asp-action="RoleCreate" asp-controller="Admin">Rol ekle</a>
+

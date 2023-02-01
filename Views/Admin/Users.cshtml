@@ -1,0 +1,54 @@
+﻿@model IEnumerable<AppUser>
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_Admin_Layout_.cshtml";
+}
+
+<h1 style="text-align:center">Kullanıcılar listesi</h1>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Resim</th>
+            <th>UserName</th>
+            <th>E-mail</th>
+            <th>Şehir</th>
+            <th>Doğum Tarihi</th>
+            <th>Roles</th>
+            <th>Tools</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Count() == 0)
+        {
+            <tr>
+
+                <td style="text-align:center" colspan="3">Hiçbir üye bulunmamaktadır</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td><div class="row" style="height:75px"><div class="col-12"><img style="height:75px;width:75px" class="rounded-circle" src="@item.Picture" /></div></div></td>
+                    <td>@item.UserName</td>
+                    <td>@item.Email</td>
+                    <td>@item.City</td>
+                    @if (item.BirthDate != null)
+                    {
+                        <td>@item.BirthDate.Value.ToShortDateString()</td>
+                    }
+                    else
+                    {
+                        <td>BELİRTİLMEMİŞ</td>
+                    }
+                    <td user-roles="@item.Id"></td>
+                    <td><a class="btn btn-info" asp-route-id="@item.Id" asp-action="AssignRole">Rol Ata</a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

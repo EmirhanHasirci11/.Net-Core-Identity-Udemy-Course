@@ -19,11 +19,7 @@ namespace IdentityUdemyCourse.CustomValidation
 
                     errors.Add(new IdentityError() { Code = "PasswordContainsUserName", Description = "Şifre kullanıcı adı içermemelidir" });
                 }
-            }
-            if (password.ToLower().Contains("1234"))
-            {
-                errors.Add(new IdentityError() { Code = "PasswordContains1234", Description = "Şifrede ardışık sayılar bulunmamalıdır" });
-            }
+            }            
             if (password.ToLower().Contains(user.Email.ToLower()))
             {
                 errors.Add(new IdentityError() { Code = "PasswordContainsEmail", Description = "Şifre emaili içermemelidir" });
