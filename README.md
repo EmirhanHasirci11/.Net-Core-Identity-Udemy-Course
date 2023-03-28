@@ -1,2 +1,3 @@
 # .Net-Core-Identity-Udemy-Course
- Udemy course from Fatih Çakıroğlu
+
+Udemy course by Fatih Çakıroğlu
